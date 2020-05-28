@@ -1,4 +1,6 @@
 
+GCC_PARAMS=-m32
+LD_PARAMS=-melf_i386
 # Automatically expand to a list of existing files that
 # match the patterns
 C_SOURCES = $(wildcard kernel/*.c drivers/*.c)
@@ -17,7 +19,7 @@ os-image: boot/boot_sect.bin kernel.bin
 # Link kernel object files into one binary , making sure the
 # entry code is right at the start of the binary .
 kernel.bin: kernel/kernel_entry.o ${OBJ}
-	ld -m elf_i386 -o $@ -Ttext 0x1000 $^ --oformat binary
+	ld $(LD_PARAMS) -o $@ -Ttext 0x1000 $^ --oformat binary
 
 
 # Assemble the kernel_entry .
@@ -27,7 +29,7 @@ kernel.bin: kernel/kernel_entry.o ${OBJ}
 # Generic rule for compiling C code to an object file
 # For simplicity , we C files depend on all header files .
 %.o: %.c ${HEADERS}
-	gcc -m32 -ffreestanding -c $< -o $@
+	gcc $(GCC_PARAMS) -ffreestanding -c $< -o $@
 
 %.bin: %.asm
 	nasm -i'boot/' $< -f bin -o $@

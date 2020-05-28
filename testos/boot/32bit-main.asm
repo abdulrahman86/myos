@@ -1,5 +1,5 @@
 [org 0x7c00] ; bootloader offset
-    mov bp, 0x9000 ; set the stack
+    mov bp, 0x200000 ; set the stack
     mov sp, bp
 
     mov bx, MSG_REAL_MODE
