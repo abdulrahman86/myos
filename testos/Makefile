@@ -1,5 +1,5 @@
 
-GCC_PARAMS=-m32
+GCC_PARAMS=-m32 -Iinclude -fno-use-cxa-atexit -nostdlib -fno-builtin -fno-rtti -fno-exceptions -fno-leading-underscore -Wno-write-strings
 LD_PARAMS=-melf_i386
 # Automatically expand to a list of existing files that
 # match the patterns
