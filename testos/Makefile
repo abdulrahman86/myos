@@ -1,6 +1,7 @@
 
 GCC_PARAMS=-m32 -Iinclude -fno-use-cxa-atexit -nostdlib -fno-builtin -fno-rtti -fno-exceptions -fno-leading-underscore -Wno-write-strings
 LD_PARAMS=-melf_i386
+AS_PARAMS=-i'boot/'
 # Automatically expand to a list of existing files that
 # match the patterns
 C_SOURCES = $(wildcard kernel/*.c drivers/*.c)
@@ -32,7 +33,7 @@ kernel.bin: kernel/kernel_entry.o ${OBJ}
 	gcc $(GCC_PARAMS) -ffreestanding -c $< -o $@
 
 %.bin: %.asm
-	nasm -i'boot/' $< -f bin -o $@
+	nasm $(AS_PARAMS) $< -f bin -o $@
 
 clean:
 	rm -fr *.bin *.dis *.o os-image
