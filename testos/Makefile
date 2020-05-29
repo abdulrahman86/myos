@@ -4,13 +4,13 @@ LD_PARAMS=-melf_i386
 AS_PARAMS=-i'boot/'
 # Automatically expand to a list of existing files that
 # match the patterns
-C_SOURCES = $(wildcard kernel/*.c drivers/*.c)
+C_SOURCES = $(wildcard kernel/*.c drivers/*.c cpu/*.c)
 
-HEADERS = $(wildcard kernel/*.h drivers/*.h)
+HEADERS = $(wildcard kernel/*.h drivers/*.h cpu/*.h)
 
 # Create a list of object files to build , simple by replacing
 # the ’.c’ extension of filenames in C_SOURCES with ’.o’
-OBJ = ${C_SOURCES:.c=.o}
+OBJ = ${C_SOURCES:.c=.o cpu/interrupt.o}
 
 all: os-image
 
