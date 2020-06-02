@@ -1,5 +1,7 @@
 #include "../drivers/screen.h"
 #include "util.h"
+#include "../cpu/isr.h"
+#include "../cpu/timer.h"
 
 void main() {
     clear_screen();
@@ -15,8 +17,13 @@ void main() {
     kprint_at("This text forces the kernel to scroll. Row 0 will disappear. ", 60, 24);
     kprint("And with this text, the kernel will scroll again, and row 1 will disappear too!");
 
+
+
     isr_install();
+    asm volatile("sti");
+    
     /* Test the interrupts */
     __asm__ __volatile__("int $2");
     __asm__ __volatile__("int $3");
+    init_timer(50);
 }

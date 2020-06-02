@@ -35,6 +35,7 @@ kernel.bin: kernel/kernel_entry.o ${OBJ}
 %.bin: %.asm
 	nasm $(AS_PARAMS) $< -f bin -o $@
 
+.PHONY: clean
 clean:
 	rm -fr *.bin *.dis *.o os-image
 	rm -fr kernel/*.o boot/*.bin drivers/*.o
