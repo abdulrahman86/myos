@@ -25,5 +25,6 @@ void main() {
     /* Test the interrupts */
     __asm__ __volatile__("int $2");
     __asm__ __volatile__("int $3");
-    init_timer(50);
+    //init_timer(50);
+    init_keyboard();
 }
