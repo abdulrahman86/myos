@@ -2,6 +2,13 @@
 #include "ports.h"
 #include "../cpu/isr.h"
 #include "screen.h"
+#include "../drivers/us.h"
+
+#define KBD_LAYOUT kbd_us
+
+/* Global indicator as to the status of
+ * various keyboard controls */
+unsigned short keystatus = 0x0000;
 
 static void keyboard_callback(registers_t regs) {
     /* The PIC leaves us the scancode in port 0x60 */
@@ -19,6 +26,42 @@ void init_keyboard() {
    register_interrupt_handler(IRQ1, keyboard_callback); 
 }
 
+void print_letter_1(u8 scancode) {
+
+    /* If the top bit of the byte we read from the keyboard is
+     * set, that means that a key has just been released */
+    if (scancode & 0x80)
+    {
+        /* You can use this one to see if the user released
+         * shift, alt or control keys... */
+        if (KBD_LAYOUT[scancode] == KB_SHIFT)
+            keystatus &= ~0x0100;
+        else if (KBD_LAYOUT[scancode] == KB_CTRL)
+            keystatus &= ~0x0010;
+        else if (KBD_LAYOUT[scancode] == KB_ALT)
+            keystatus &= ~0x0001;
+    }
+    else
+    {
+        /* Here, a key was just pressed.  Please note that if
+         * you hold a key down, you will get repeated key press
+         * interrupts. */
+        if (KBD_LAYOUT[scancode] == KB_SHIFT)
+            keystatus |= 0x0100;
+        else if (KBD_LAYOUT[scancode] == KB_CTRL)
+            keystatus |= 0x0010;
+        else if (KBD_LAYOUT[scancode] == KB_ALT)
+            keystatus |= 0x0001;
+
+        /* Example showing keyboard characters outputted to the
+         * screen */
+        if ((keystatus & 0x0100) == 0x0100)
+            kprint(KBD_LAYOUT[scancode+128]);
+        else
+            kprint(KBD_LAYOUT[scancode]);
+    }
+}
+
 void print_letter(u8 scancode) {
     switch (scancode) {
         case 0x0:
@@ -28,7 +71,7 @@ void print_letter(u8 scancode) {
             kprint("ESC");
             break;
         case 0x2:
-            kprint('1');
+            kprint("1");
             break;
         case 0x3:
             kprint("2");
