@@ -27,4 +27,5 @@ void main() {
     __asm__ __volatile__("int $3");
     //init_timer(50);
     init_keyboard();
+    init_mouse();
 }
