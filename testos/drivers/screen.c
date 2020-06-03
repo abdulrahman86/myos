@@ -43,6 +43,16 @@ void kprint(char *message) {
     kprint_at(message, -1, -1);
 }
 
+void change_color(char attr, int col, int row) {
+
+    unsigned char *vidmem = (unsigned char*) VIDEO_ADDRESS;
+
+    int offset = get_offset(col, row);
+    
+    vidmem[offset+1] = attr;
+
+}
+
 
 /**********************************************************
  * Private kernel functions                               *
