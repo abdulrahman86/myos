@@ -14,12 +14,12 @@ static void keyboard_callback(registers_t regs) {
     /* The PIC leaves us the scancode in port 0x60 */
     u8 scancode = port_byte_in(0x60);
     char *sc_ascii;
-    int_to_ascii(scancode, sc_ascii);
-    kprint("Keyboard scancode: ");
-    kprint(sc_ascii);
-    kprint(", ");
+    //int_to_ascii(scancode, sc_ascii);
+    //kprint("Keyboard scancode: ");
+    //kprint(sc_ascii);
+    //kprint(", ");
     print_letter_1(scancode);
-    kprint("\n");
+    //kprint("\n");
 }
 
 void init_keyboard() {
@@ -46,12 +46,21 @@ void print_letter_1(u8 scancode) {
         /* Here, a key was just pressed.  Please note that if
          * you hold a key down, you will get repeated key press
          * interrupts. */
-        if (KBD_LAYOUT[scancode] == KB_SHIFT)
+        if (KBD_LAYOUT[scancode] == KB_SHIFT) {
+
             keystatus |= 0x0100;
-        else if (KBD_LAYOUT[scancode] == KB_CTRL)
+            return;
+        }
+        else if (KBD_LAYOUT[scancode] == KB_CTRL){
+
             keystatus |= 0x0010;
-        else if (KBD_LAYOUT[scancode] == KB_ALT)
+            return;
+        }
+        else if (KBD_LAYOUT[scancode] == KB_ALT) {
+
             keystatus |= 0x0001;
+            return;
+        }
 
         /* Example showing keyboard characters outputted to the
          * screen */
