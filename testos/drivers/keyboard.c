@@ -18,7 +18,7 @@ static void keyboard_callback(registers_t regs) {
     kprint("Keyboard scancode: ");
     kprint(sc_ascii);
     kprint(", ");
-    print_letter(scancode);
+    print_letter_1(scancode);
     kprint("\n");
 }
 
@@ -55,10 +55,16 @@ void print_letter_1(u8 scancode) {
 
         /* Example showing keyboard characters outputted to the
          * screen */
-        if ((keystatus & 0x0100) == 0x0100)
-            kprint(KBD_LAYOUT[scancode+128]);
-        else
-            kprint(KBD_LAYOUT[scancode]);
+        if ((keystatus & 0x0100) == 0x0100) {
+            char *str[2];
+            str[0] = KBD_LAYOUT[scancode+128];
+            kprint(str);
+        }
+        else {
+            char *str[2];
+            str[0] = KBD_LAYOUT[scancode];
+            kprint(str);
+        }
     }
 }
 

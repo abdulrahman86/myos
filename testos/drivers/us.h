@@ -7,7 +7,7 @@
 #define KB_ALT 0x12
 #define KB_CTRL 0x13
 
-unsigned char kbd_us[256] =
+const char kbd_us[256] =
 {
 	0, 27, '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', '\b',
 	'\t', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', '\n',
