@@ -8,112 +8,83 @@ int mouse_x;
 int mouse_y;
 u8 buffer[3];
 int offset;
+int buttons;
 
-int sensitivity;
-int skip;
+
 
 
 static void mouse_callback(registers_t regs) {
     
     buffer[offset] = port_byte_in(MOUSE_DATA_PORT);
 
-    char x_offset[5];
-    char y_offset[5];
-
-    char mouse_x_offset[5];
-    char mouse_y_offset[5];
-
-
     offset = (offset + 1) % 3;
 
     if (offset == 0) {
 
-        int_to_ascii(buffer[1], x_offset);
-        int_to_ascii(buffer[2], y_offset);
+        int old_x = mouse_x;
+        int old_y = mouse_y;
 
-        skip = (skip + 1) % sensitivity;
+        if (buffer[2] > 0) {
 
-        //if (skip == 0) {
+            mouse_x = mouse_x + 1;
+        }
+        else {
 
-            int old_x = mouse_x;
-            int old_y = mouse_y;
+            mouse_x = mouse_x - 1;
+        }
 
-            if (buffer[2] > 0) {
+        if (buffer[1] > 0) {
 
-                mouse_x = mouse_x + sensitivity;
+            mouse_y = mouse_y - 1;
+        }
+        else {
+            mouse_y = mouse_y + 1;
+        }
+
+
+        if (mouse_x > 79) {
+            mouse_x = 79;
+        }
+
+        if (mouse_x < 0) {
+            mouse_x = 0;
+        }
+
+
+        if (mouse_y > 24) {
+            mouse_y = 24;
+        }
+
+        if (mouse_y < 0) {
+            mouse_y = 0;
+        }
+
+        trigger_move_mouse_pointer(old_x, old_y, mouse_x, mouse_y);
+
+        for(u8 i = 0; i < 3; i++)
+        {
+            char button_index[3];
+
+            int_to_ascii(i, button_index);
+
+            if((buffer[0] & (0x1<<i)) != (buttons & (0x1<<i)))
+            {
+                if(buttons & (0x1<<i)) {
+
+                    kprint("Mouse up detected for ");
+                    kprint(button_index);
+
+                    //handler->OnMouseUp(i+1);
+                }
+                else {
+
+                    kprint("Mouse down detected for ");
+                    kprint(button_index);
+                }
             }
-            else {
-
-                mouse_x = mouse_x - sensitivity;
-            }
-
-            if (buffer[1] > 0) {
-
-                mouse_y = mouse_y - sensitivity;
-            }
-            else {
-                mouse_y = mouse_y + sensitivity;
-            }
-
-
-            if (mouse_x > 79) {
-                mouse_x = 79;
-            }
-
-            if (mouse_x < 0) {
-                mouse_x = 0;
-            }
-
-
-            if (mouse_y > 24) {
-                mouse_y = 24;
-            }
-
-            if (mouse_y < 0) {
-                mouse_y = 0;
-            }
-
-            trigger_move_mouse_pointer(old_x, old_y, mouse_x, mouse_y);
-
-        //}
-
-
-
-        // if (mouse_x > 79) 
-        //     mouse_x = 79;
-        // else if (mouse_x < 0)
-        //     mouse_x = 0;
-
-        // if (mouse_y > 24) 
-        //     mouse_y = 24;
-        // else if (mouse_y < 0)
-        //     mouse_y = 0;
-
-
-        // kprint("Xoffset: ");
-        // kprint(x_offset);
-        // kprint(", ");
-
-        // kprint("Yoffset: ");
-        // kprint(y_offset);
-        // kprint("\n");
-
-
-        // int_to_ascii(mouse_x, mouse_x_offset);
-        // int_to_ascii(mouse_y, mouse_y_offset);
-
-        // kprint("Mouse Xoffset: ");
-        // kprint(mouse_x_offset);
-        // kprint(", ");
-
-        // kprint("Mouse Yoffset: ");
-        // kprint(mouse_y_offset);
-        // kprint("\n");
-
-        //kprint("Mouse Interrupt!");
-
-
-    
+        }
+        
+        buttons = buffer[0];
 
     }
 
@@ -146,10 +117,8 @@ void init_mouse() {
 
     mouse_x = 40;
     mouse_y = 12;
-    skip = 0;
-    sensitivity = 5;
-
     offset = 0;
+    buttons = 0;
 
     trigger_move_mouse_pointer(mouse_x, mouse_y, mouse_x, mouse_y);
 }
