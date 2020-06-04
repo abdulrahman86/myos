@@ -1,7 +1,7 @@
-#include "../drivers/screen.h"
-#include "util.h"
-#include "../cpu/isr.h"
-#include "../cpu/timer.h"
+#include "drivers/screen.h"
+#include "kernel/util.h"
+#include "cpu/isr.h"
+#include "cpu/timer.h"
 
 void main() {
     clear_screen();

@@ -1,8 +1,8 @@
-#include "mouse.h"
-#include "ports.h"
-#include "../cpu/isr.h"
-#include "screen.h"
-#include "../kernel/util.h"
+#include "drivers/mouse.h"
+#include "drivers/ports.h"
+#include "cpu/isr.h"
+#include "drivers/screen.h"
+#include "kernel/util.h"
 
 int mouse_x;
 int mouse_y;

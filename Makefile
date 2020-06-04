@@ -6,7 +6,7 @@ AS_PARAMS=-i'boot/'
 # match the patterns
 C_SOURCES = $(wildcard kernel/*.c drivers/*.c cpu/*.c)
 
-HEADERS = $(wildcard kernel/*.h drivers/*.h cpu/*.h)
+HEADERS = $(wildcard include/kernel/*.h include/drivers/*.h include/cpu/*.h)
 
 # Create a list of object files to build , simple by replacing
 # the ’.c’ extension of filenames in C_SOURCES with ’.o’
@@ -16,6 +16,7 @@ all: os-image
 
 os-image: boot/boot_sect.bin kernel.bin
 	cat $^ > os-image
+	rm -fr ${OBJ} boot/*.bin
 
 # Link kernel object files into one binary , making sure the
 # entry code is right at the start of the binary .

@@ -1,8 +1,8 @@
-#include "keyboard.h"
-#include "ports.h"
-#include "../cpu/isr.h"
-#include "screen.h"
-#include "../drivers/us.h"
+#include "drivers/keyboard.h"
+#include "drivers/ports.h"
+#include "cpu/isr.h"
+#include "drivers/screen.h"
+#include "drivers/us.h"
 
 #define KBD_LAYOUT kbd_us
 
