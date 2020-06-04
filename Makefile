@@ -6,7 +6,7 @@ AS_PARAMS=-i'boot/'
 # match the patterns
 C_SOURCES = $(wildcard kernel/*.c drivers/*.c cpu/*.c)
 
-HEADERS = $(wildcard include/kernel/*.h include/drivers/*.h include/cpu/*.h)
+#HEADERS = $(wildcard include/kernel/*.h include/drivers/*.h include/cpu/*.h)
 
 # Create a list of object files to build , simple by replacing
 # the ’.c’ extension of filenames in C_SOURCES with ’.o’
@@ -30,7 +30,7 @@ kernel.bin: kernel/kernel_entry.o ${OBJ}
 
 # Generic rule for compiling C code to an object file
 # For simplicity , we C files depend on all header files .
-%.o: %.c ${HEADERS}
+%.o: %.c #${HEADERS}
 	gcc $(GCC_PARAMS) -ffreestanding -c $< -o $@
 
 %.bin: %.asm
