@@ -6,7 +6,7 @@
 
 int mouse_x;
 int mouse_y;
-u8 buffer[3];
+s8 buffer[3];
 int offset;
 int buttons;
 
@@ -14,8 +14,14 @@ int buttons;
 
 
 static void mouse_callback(registers_t regs) {
+
+    u8 status = port_byte_in(MOUSE_COMMAND_PORT);
+
+    if (!(status & 0x20))
+        return;
     
     buffer[offset] = port_byte_in(MOUSE_DATA_PORT);
+
 
     offset = (offset + 1) % 3;
 
@@ -24,25 +30,13 @@ static void mouse_callback(registers_t regs) {
         int old_x = mouse_x;
         int old_y = mouse_y;
 
-        if (buffer[2] > 0) {
 
-            mouse_x = mouse_x + 1;
-        }
-        else {
+        mouse_x += buffer[1] / 10;
 
-            mouse_x = mouse_x - 1;
-        }
-
-        if (buffer[1] > 0) {
-
-            mouse_y = mouse_y - 1;
-        }
-        else {
-            mouse_y = mouse_y + 1;
-        }
+        mouse_y -= buffer[2] / 10;
 
 
-        if (mouse_x > 79) {
+        if (mouse_x >= 80) {
             mouse_x = 79;
         }
 
@@ -51,7 +45,7 @@ static void mouse_callback(registers_t regs) {
         }
 
 
-        if (mouse_y > 24) {
+        if (mouse_y >= 25) {
             mouse_y = 24;
         }
 
@@ -95,9 +89,17 @@ static void mouse_callback(registers_t regs) {
 
 void trigger_move_mouse_pointer(int old_x, int old_y, int new_x, int new_y) {
 
-    change_color(WHITE_ON_BLACK, old_x, old_y);
+    u16* VideoMemory = (u16*)0xb8000;
 
-    change_color(BLACK_ON_WHITE, new_x, new_y);
+    VideoMemory[80*old_y+old_x] = (VideoMemory[80*old_y+old_x] & 0x0F00) << 4
+                        | (VideoMemory[80*old_y+old_x] & 0xF000) >> 4
+                        | (VideoMemory[80*old_y+old_x] & 0x00FF);
+
+
+
+    VideoMemory[80*new_y+new_x] = (VideoMemory[80*new_y+new_x] & 0x0F00) << 4
+                        | (VideoMemory[80*new_y+new_x] & 0xF000) >> 4
+                        | (VideoMemory[80*new_y+new_x] & 0x00FF);
 }
 
 void init_mouse() {
@@ -120,5 +122,5 @@ void init_mouse() {
     offset = 0;
     buttons = 0;
 
-    trigger_move_mouse_pointer(mouse_x, mouse_y, mouse_x, mouse_y);
+    //trigger_move_mouse_pointer(mouse_x, mouse_y, mouse_x, mouse_y);
 }
