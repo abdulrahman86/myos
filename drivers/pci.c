@@ -32,37 +32,35 @@ int pci_dev_has_func(u16 bus, u16 device) {
 	 return pci_dev_read(bus, device, 0, 0x0E) & (1<<7);
 }
 
-// void pci_get_drivers() {
+void pci_get_drivers() {
 
-// 	kprint("Getting PCI Drivers!");
+	kprint("Getting PCI Drivers!");
 
-// 	for(u16 bus = 0; bus < 8; bus++)
-//     {
-//         for(u16 device = 0; device < 32; device++)
-//         {
-//             //u16 numFunctions = pci_dev_has_func(bus, device) ? 8 : 1;
+	for(u16 bus = 0; bus < 8; bus++)
+    {
+        for(u16 device = 0; device < 32; device++)
+        {
+            //u16 numFunctions = pci_dev_has_func(bus, device) ? 8 : 1;
 
-//             for(u16 function = 0; function < 8; function++)
-//             {
-//             	kprint("PCI Device Detected!");
+            for(u16 function = 0; function < 8; function++)
+            {
+            	kprint("PCI Device Detected!");
             	
-//             	//pci_dev_t dev = pci_get_dev_desc(bus, device, function);
+            	//pci_dev_t dev = pci_get_dev_desc(bus, device, function);
                 
-//              // 	if(dev.vendor_id == 0x0000 || dev.vendor_id == 0xFFFF) {
+             // 	if(dev.vendor_id == 0x0000 || dev.vendor_id == 0xFFFF) {
 
-//              // 		kprint("PCI No Device!");
-//              //        continue;
-//              //    }
-//              //   	else {
+             // 		kprint("PCI No Device!");
+             //        continue;
+             //    }
+             //   	else {
 
-//              //   		kprint("PCI Device Detected!");
-//              //   	}
-//             }
-//         }
-//     }
-
-// 	return;
-// }
+             //   		kprint("PCI Device Detected!");
+             //   	}
+            }
+        }
+    }
+}
 
 // pci_dev_t pci_get_dev_desc(u16 bus, u16 device, u16 function) {
 	

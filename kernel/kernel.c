@@ -2,6 +2,7 @@
 #include "kernel/util.h"
 #include "cpu/isr.h"
 #include "cpu/timer.h"
+#include "drivers/pci.h"
 
 void main() {
     clear_screen();
@@ -28,4 +29,5 @@ void main() {
     //init_timer(50);
     init_keyboard();
     init_mouse();
+    pci_get_drivers();
 }
