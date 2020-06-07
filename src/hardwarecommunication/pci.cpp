@@ -79,8 +79,7 @@ void PeripheralComponentInterconnectController::SelectDrivers(DriverManager* dri
                 
                 if(dev.vendor_id == 0x0000 || dev.vendor_id == 0xFFFF)
                     continue;
-                
-                
+                                
                 for(int barNum = 0; barNum < 6; barNum++)
                 {
                     BaseAddressRegister bar = GetBaseAddressRegister(bus, device, function, barNum);
