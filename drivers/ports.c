@@ -33,3 +33,15 @@ unsigned short port_word_in (unsigned short port) {
 void port_word_out (unsigned short port, unsigned short data) {
     __asm__("out %%ax, %%dx" : : "a" (data), "d" (port));
 }
+
+unsigned short port_dword_in (unsigned short port) {
+
+    unsigned int rv;
+    asm volatile ("inl %%dx, %%eax" : "=a" (rv) : "dN" (port));
+    return rv;
+}
+
+void port_dword_out (unsigned short port, unsigned int data) {
+
+    asm volatile ("outl %%eax, %%dx" : : "dN" (port), "a" (data));
+}
